@@ -17,6 +17,7 @@ export default function Content() {
         movies={listMoviesOriginal}
         title="Movies Original"
         isNetFlix={true}
+        isDescription={true}
       />
       <MovieRow
         movies={listMoviesFilmTH}

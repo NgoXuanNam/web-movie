@@ -1,10 +1,15 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import { AiOutlineClose } from "react-icons/ai";
 
 import styled from "styled-components";
 
-export default function MovieRow({ movies, title, isNetFlix, isPosterShort }) {
+export default function MovieRow({
+  movies,
+  title,
+  isNetFlix,
+  isPosterShort,
+  isDescription,
+}) {
   const movieSlider = useRef();
   const movieItem = useRef();
 
@@ -30,14 +35,6 @@ export default function MovieRow({ movies, title, isNetFlix, isPosterShort }) {
       (widthItem + 8) * index
     }px)`;
   };
-  const [showDetail, setShowDetail] = useState(false);
-
-  const handleDetailMovie = () => {
-    if (showDetail === true) {
-      setShowDetail(false);
-    }
-    setShowDetail(true);
-  };
 
   return (
     <MovieContent>
@@ -53,12 +50,21 @@ export default function MovieRow({ movies, title, isNetFlix, isPosterShort }) {
         >
           {movies.map((movie) => {
             return (
-              <div
-                key={movie.id}
-                className="movieItem"
-                ref={movieItem}
-                onClick={() => handleDetailMovie()}
-              >
+              <div key={movie.id} className="movieItem" ref={movieItem}>
+                {isDescription && (
+                  <DetailMoviesStyle>
+                    {
+                      <div className="detailmovies_wrapper">
+                        <div className="detailmovies" key={movie.id}>
+                          <h1>The movies</h1>
+                          <h2>{movie.title || movie.name}</h2>
+                          <h2>OverView</h2>
+                          <p>{movie.overview}</p>
+                        </div>
+                      </div>
+                    }
+                  </DetailMoviesStyle>
+                )}
                 <img
                   src={
                     !isPosterShort
@@ -77,24 +83,6 @@ export default function MovieRow({ movies, title, isNetFlix, isPosterShort }) {
         className={`arrowRight ${isNetFlix && "isNetFlix"}`}
         onClick={handleArrowRight}
       />
-      {showDetail && (
-        <DetailMoviesStyle>
-          {movies.map((movie) => {
-            return (
-              <div className="detailmovies" key={movie.id}>
-                <h1>The movies</h1>
-                <h2>{movie.title}</h2>
-                <h2>OverView</h2>
-                <p>{movie.overview}</p>
-                <AiOutlineClose
-                  className="detailmovies-close"
-                  onClick={() => setShowDetail(false)}
-                />
-              </div>
-            );
-          })}
-        </DetailMoviesStyle>
-      )}
     </MovieContent>
   );
 }
@@ -178,6 +166,11 @@ const MovieSlider = styled.div`
       opacity: 1;
       z-index: 10;
     }
+    &:hover .detailmovies_wrapper {
+      display: block;
+      border-radius: 1rem;
+    }
+
     img {
       width: 100%;
       height: 100%;
@@ -204,52 +197,49 @@ const MovieSlider = styled.div`
 `;
 
 const DetailMoviesStyle = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 100;
-
-  .detailmovies {
+  .detailmovies_wrapper {
     position: absolute;
-    top: 30%;
+    top: 0%;
     left: 0%;
-    background-color: #222;
-    width: 100%;
-    min-height: 35%;
-    box-sizing: border-box;
-    padding: 0 2rem;
-    text-align: justify;
-    z-index: 1000;
-    @media screen and (min-width: 740px) and (max-width: 1024px) {
-      height: 30rem;
-    }
-    @media screen and (max-width: 739px) {
-      height: 100%;
-    }
-    h1 {
-      text-align: center;
-      font-size: 3rem;
-    }
-    h2 {
-      font-size: 2.2rem;
-    }
-    p {
-      font-size: 2rem;
-    }
-    img {
+    right: 0%;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: none;
+
+    .detailmovies {
       width: 100%;
-    }
-    .detailmovies-close {
-      position: absolute;
-      top: -10%;
-      right: 5rem;
-      font-size: 3.5rem;
+      box-sizing: border-box;
+      padding: 1rem 2rem;
+      text-align: justify;
+
+      @media screen and (min-width: 740px) and (max-width: 1024px) {
+        height: 30rem;
+      }
       @media screen and (max-width: 739px) {
-        top: -5%;
-        right: 1rem;
+        height: 100%;
+      }
+      h1 {
+        text-align: center;
+        font-size: 3rem;
+      }
+      h2 {
+        font-size: 2.2rem;
+      }
+      p {
+        font-size: 2rem;
+      }
+      img {
+        width: 100%;
+      }
+      .detailmovies-close {
+        position: absolute;
+        top: -10%;
+        right: 5rem;
+        font-size: 3.5rem;
+        @media screen and (max-width: 739px) {
+          top: -5%;
+          right: 1rem;
+        }
       }
     }
   }

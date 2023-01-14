@@ -27,7 +27,7 @@ const HeaderStyle = styled.header`
   left: 0;
   right: 0;
   height: var(--header-height);
-  z-index: 100;
+  z-index: 1000;
   @media screen and (max-width: 739px) {
     background-color: var(--color-black) !important;
   }
